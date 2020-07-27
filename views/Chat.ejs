@@ -75,7 +75,7 @@
     color: #999;
   } 
   </style>
-    <script src="../../socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
    
   </head>
   <body>
@@ -118,13 +118,11 @@
           </div></div>
 
     <script>
-      var socket = io("https://obscure-sea-37319.herokuapp.com");
+      var socket = io("/");
 
 
       function clearChat() { 
         var e = document.querySelector("#messages"); 
-        
-        //e.firstElementChild can be used. 
         var child = e.lastElementChild;  
         while (child) { 
             e.removeChild(child); 
@@ -154,7 +152,7 @@ return `${day}-${monthName}-${year}`;
 }
 
 
-      var today = new Date().toShortFormat();
+var today = new Date().toShortFormat();
 
 
 var username = prompt("Please tell me your name");
@@ -166,9 +164,10 @@ var username = prompt("Please tell me your name");
         return false;
       });
       socket.on("chat_message", function (msg,uname) {
-         const imgChar = uname.charAt(1);
+        
         if(uname != username){
-            $("#messages").append($(`   <div class="media w-50 mb-3">
+          const imgChar = uname.charAt(0);
+             $("#messages").append($(`   <div class="media w-50 mb-3">
             <figure class="figure">
 
             <img 
