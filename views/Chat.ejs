@@ -1,173 +1,185 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Group chat</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-</head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-  
-  <style>
-    body {
-      background: -webkit-linear-gradient(330deg, #000, #f0a6ca);
+<head>
+  <title>Group chat</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+
+<style>
+  body {
+    background: -webkit-linear-gradient(330deg, #000, #f0a6ca);
     background: linear-gradient(120deg, #000, #f0a6ca);
     min-height: 100vh;
   }
-  
+
   ::-webkit-scrollbar {
     width: 5px;
   }
-  
+
   ::-webkit-scrollbar-track {
     width: 5px;
     background: #f5f5f5;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     width: 1em;
     background-color: #ddd;
     outline: 1px solid slategrey;
     border-radius: 1rem;
   }
-  
-.clearfix {
-  clear: both;
-}
-.chat-img
-{
+
+
+  .chat-img {
     width: 50px;
     height: 50px;
-}.img-circle
-{
+  }
+
+  .img-circle {
     border-radius: 50%;
-}
-.chat-img
-{
+  }
+
+  .chat-img {
     display: inline-block;
-}
+  }
+
   .text-small {
     font-size: 0.9rem;
   }
-  
+
   .messages-box,
   .chat-box {
     height: 510px;
     overflow-y: scroll;
   }
+
   .clearfix:after {
-  visibility: hidden;
-  display: block;
-  font-size: 0;
-  content: " ";
-  clear: both;
-  height: 0;
-}
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+
   .rounded-lg {
     border-radius: 0.5rem;
   }
-  
+
   input::placeholder {
     font-size: 0.9rem;
     color: #999;
-  } 
-  </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
+</head>
+
+<body>
+  <div class="container justify-center">
+    <header class="text-center">
+      <h3 class="display-4 text-white"><%=roomId%> Group Chat</h3>
+ 
+    </header>
+
+  </div>
+  <div class="row mt-2">
+    <div class="container" id="users"/>
    
-  </head>
-  <body>
-    <div class="container justify-center">
-        <header class="text-center">
-          <h1 class="display-4 text-white">Group Chat</h1>
-       
-        </header>
-        <div class="row mt-2">
-          <div class="col-sm-10 col-md-10 offset-md-2 offset-sm-1 text-center">
-       <div class="col-8 px-0">
-            <div class="px-4 py-5 chat-box bg-white">
-              <div id="messages">
+    <div class="col-sm-10 col-md-10 offset-md-2 offset-sm-1 text-center">
+      <div class="col-8 px-0">
+        <div class="px-4 py-5 chat-box bg-white">
+          <div id="messages">
 
-              </div>
-      
-             
+          </div>
 
+
+
+        </div>
+
+        <form action="#" class="bg-light p-2">
+          <div class="input-group">
+            <input type="text" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-light"
+              id="txt" autocomplete="off" autofocus="on" placeholder="type your message here...">
+            <div class="input-group-append">
+              <button id="button-addon2" type="submit" class="btn btn-primary">
+                Send</button>
+
+              <button id="clear" type="button" class="btn btn-default">
+                Clear</button>
             </div>
-      
-            <form action="#" class="bg-light p-2">
-              <div class="input-group">
-                <input type="text" 
-                 aria-describedby="button-addon2" 
-                 class="form-control rounded-0 border-0 py-4 bg-light"
-                 id="txt" autocomplete="off" autofocus="on" 
-                 oninput="isTyping()" placeholder="type your message here...">
-                <div class="input-group-append">
-                  <button id="button-addon2" 
-                  type="submit" class="btn btn-primary"> 
-                   Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
 
-                   <button id="clear" 
-                   type="button" class="btn btn-default"> 
-                    Clear</button>
-                </div>
-              </div>
-            </form>
-          </div></div>
-          </div></div>
-
-    <script>
-      var socket = io("/");
+  <script>
+    var socket = io("/");
 
 
-      function clearChat() { 
-        var e = document.querySelector("#messages"); 
-        var child = e.lastElementChild;  
-        while (child) { 
-            e.removeChild(child); 
-            child = e.lastElementChild; 
-        } 
-    } 
-    var btn = document.getElementById( 
-    "clear").onclick = function() { 
-      clearChat(); 
-    } 
-
-      
-Date.prototype.toShortFormat = function() {
-
-let monthNames =["Jan","Feb","Mar","Apr",
-                  "May","Jun","Jul","Aug",
-                  "Sep", "Oct","Nov","Dec"];
-
-let day = this.getDate();
-
-let monthIndex = this.getMonth();
-let monthName = monthNames[monthIndex];
-
-let year = this.getFullYear();
-
-return `${day}-${monthName}-${year}`;  
-}
+    function clearChat() {
+      var e = document.querySelector("#messages");
+      var child = e.lastElementChild;
+      while (child) {
+        e.removeChild(child);
+        child = e.lastElementChild;
+      }
+    }
+    var btn = document.getElementById(
+      "clear").onclick = function () {
+        clearChat();
+      }
 
 
-var today = new Date().toShortFormat();
+    Date.prototype.toShortFormat = function () {
+
+      let monthNames = ["Jan", "Feb", "Mar", "Apr",
+        "May", "Jun", "Jul", "Aug",
+        "Sep", "Oct", "Nov", "Dec"];
+
+      let day = this.getDate();
+
+      let monthIndex = this.getMonth();
+      let monthName = monthNames[monthIndex];
+
+      let year = this.getFullYear();
+
+      return `${day}-${monthName}-${year}`;
+    }
 
 
-var username = prompt("Please tell me your name");
-      socket.emit("username", username);
-      $("form").submit(function (e) {
-        e.preventDefault(); // prevents page reloading
-        socket.emit("chat_message", $("#txt").val());
-        $("#txt").val("");
-        return false;
-      });
-      socket.on("chat_message", function (msg,uname) {
-        
-        if(uname != username){
-          const imgChar = uname.charAt(0);
-             $("#messages").append($(`   <div class="media w-50 mb-3">
+    var today = new Date().toShortFormat();
+
+
+    var username = prompt("Please tell me your name");
+    socket.emit("username", username);
+
+
+
+
+    $("form").submit(function (e) {
+      e.preventDefault(); // prevents page reloading
+      socket.emit("chat_message", $("#txt").val());
+      $("#txt").val("");
+      return false;
+    });
+
+
+
+
+    socket.on("chat_message", function (msg, uname) {
+
+      if (uname != username) {
+        const imgChar = uname.charAt(0);
+        $("#messages").append($(`   <div class="media w-50 mb-3">
             <figure class="figure">
 
             <img 
@@ -183,8 +195,8 @@ var username = prompt("Please tell me your name");
             <p class="small text-muted">${today}</p>
           </div>
         </div>`));
-        }else{
-            $("#messages").append($(`  
+      } else {
+        $("#messages").append($(`  
             <div class="media w-50 ml-auto mb-3">
               <div class="media-body">
             <div class="bg-secondary rounded py-2 px-3 mb-2">
@@ -202,15 +214,32 @@ var username = prompt("Please tell me your name");
         </div>
         `));
 
-        }
-       
-      });
-      socket.on("is_online", function (username) {
+      }
 
-        $("#messages").append($("<div class='alert alert-info'>").html(username));
-      });
+    });
+
+    socket.on("userExist", (msg) => {
+      alert(msg);
+    })
+
+
+    socket.on("is_online", function (username, userList) {
+
+      for (var activeUser in userList) {
+
+        $("#users").append($(`<span class="chat-img right clearfix  mx-2">
+                   <img 
+                                src="http://placehold.it/50/FA6F57/fff&text=${activeUser.charAt(0).toUpperCase()}"
+                                 alt=${activeUser} class="img-circle"
+                                 class='img-rounded' />
+                        </span>`))
+
+      }
+      $("#messages").append($("<div class='alert alert-info'>").html(username));
+    });
       // ask username
-     
-    </script>
-  </body>
+
+  </script>
+</body>
+
 </html>
