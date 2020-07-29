@@ -14,8 +14,7 @@
 
 <style>
   body {
-    background: -webkit-linear-gradient(330deg, #000, #f0a6ca);
-    background: linear-gradient(120deg, #000, #f0a6ca);
+   background-image: linear-gradient(to right top, #bac6d8, #cdd3e2, #dfe1eb, #f0f0f5, #ffffff);   min-height: 100vh;
     min-height: 100vh;
   }
 
@@ -67,6 +66,9 @@
     clear: both;
     height: 0;
   }
+  .text-blue{
+    color: blue;
+  }
 
   .rounded-lg {
     border-radius: 0.5rem;
@@ -83,18 +85,22 @@
 
 <body>
   <div class="container justify-center">
-    <header class="text-center">
-      <h3 class="display-4 text-white"><%=roomId%> Group Chat</h3>
- 
-    </header>
-
-  </div>
-  <div class="row mt-2">
-    <div class="container" id="users"/>
+    <nav class="navbar navbar-light bg-light justify-center text-center">
    
+
+      <ul class="nav navbar-nav mx-auto">
+        <li class="nav-item navbar-brand mb-0 h1"><span class="navbar-brand mb-0 h1 text-center">Random Group Chat</span></li>
+    </ul>
+
+    </nav>
+
+  
+  <div class="row mt-2">
+    <!-- <div class="container" id="users"/> -->
+
     <div class="col-sm-10 col-md-10 offset-md-2 offset-sm-1 text-center">
       <div class="col-8 px-0">
-        <div class="px-4 py-5 chat-box bg-white">
+        <div class="px-4 py-1 chat-box bg-white">
           <div id="messages">
 
           </div>
@@ -119,11 +125,14 @@
       </div>
     </div>
   </div>
-  </div>
+  </div></div>
 
   <script>
     var socket = io("/");
 
+    var username = "<%=username%>"
+
+    socket.emit("username", username);
 
     function clearChat() {
       var e = document.querySelector("#messages");
@@ -159,9 +168,6 @@
     var today = new Date().toShortFormat();
 
 
-    var username = prompt("Please tell me your name");
-    socket.emit("username", username);
-
 
 
 
@@ -179,14 +185,13 @@
 
       if (uname != username) {
         const imgChar = uname.charAt(0);
-        $("#messages").append($(`   <div class="media w-50 mb-3">
+        $("#messages").append($(`   
+        <div class="media w-50 mb-3">
             <figure class="figure">
-
-            <img 
-        title=${uname}
-        src="http://placehold.it/50/55C1E7/fff&text=${imgChar.toUpperCase()}" alt=${uname} width="50" class="rounded-circle">
-     
-        </figure>  
+            <img title=${uname}
+              src="http://placehold.it/50/55C1E7/fff&text=${imgChar.toUpperCase()}" alt=${uname} width="50" class="rounded-circle">
+            </figure>
+          
         <div class="media-body ml-2">
             <div class="bg-light rounded py-2 px-3 mb-1">
               <p class="text-small mb-0 text-muted text-wrap">
@@ -199,18 +204,17 @@
         $("#messages").append($(`  
             <div class="media w-50 ml-auto mb-3">
               <div class="media-body">
-            <div class="bg-secondary rounded py-2 px-3 mb-2">
-              <p class="text-small mb-0 text-white">
-                ${msg}</p>
-            </div>
-            <p class="small text-muted">${today}</p>
-          </div>
-       <span class="chat-img right clearfix  mx-2">
-                   <img 
-                                src="http://placehold.it/50/FA6F57/fff&text=ME"
+                  <div class="bg-secondary rounded py-2 px-3 mb-2">
+                    <p class="text-small mb-0 text-white">
+                      ${msg}</p>
+                  </div>
+                 <p class="small text-muted">${today}</p>
+               </div>
+            <span class="chat-img right clearfix  mx-2">
+                   <img src="http://placehold.it/50/FA6F57/fff&text=ME"
                                  alt="ME" class="img-circle"
-                                 class='img-rounded' />
-                        </span>
+                          class='img-rounded' />
+            </span>
         </div>
         `));
 
@@ -218,26 +222,24 @@
 
     });
 
-    socket.on("userExist", (msg) => {
-      alert(msg);
-    })
-
 
     socket.on("is_online", function (username, userList) {
 
-      for (var activeUser in userList) {
+      // for (var activeUser in userList) {
 
-        $("#users").append($(`<span class="chat-img right clearfix  mx-2">
-                   <img 
-                                src="http://placehold.it/50/FA6F57/fff&text=${activeUser.charAt(0).toUpperCase()}"
-                                 alt=${activeUser} class="img-circle"
-                                 class='img-rounded' />
-                        </span>`))
+      //   $("#users").append($(`<span class="chat-img right clearfix  mx-2">
+      //              <img 
+      //                           src="http://placehold.it/50/FA6F57/fff&text=${activeUser.charAt(0).toUpperCase()}"
+      //                            alt=${activeUser} class="img-circle"
+      //                            class='img-rounded' />
+      //                   </span>`))
 
-      }
-      $("#messages").append($("<div class='alert alert-info'>").html(username));
+      // }
+
+     
+      $("#messages").append($("<div class=' font-weight-bold text-blue mb-4'>").html(username));
     });
-      // ask username
+      
 
   </script>
 </body>

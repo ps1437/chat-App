@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Group chat</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
+</head>
+<style>
+  html,
+  body {
+    height: 100%;
+    background-image: linear-gradient(to right top, #bac6d8, #cdd3e2, #dfe1eb, #f0f0f5, #ffffff); }
+
+  .global-container {
+    height: 100%;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+  form {
+    padding-top: 10px;
+    font-size: 14px;
+    margin-top: 30px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-title {
+    font-weight: 300;
+  }
+
+  .btn {
+    font-size: 14px;
+    margin-top: 20px;
+  }
+
+
+  .login-form {
+    width: 330px;
+    margin: 20px;
+  }
+</style>
+
+<body>
+  <div class="container global-container">
+
+      <div class="card login-form">
+        <div class="card-body">
+          <h3 class="card-title text-center">Join to Group Chat</h3>
+          <div class="card-text">
+            <form action="/join" method="POST">
+              <div class="form-group">
+                <label for="username">Name</label>
+                <input type="text" class="form-control form-control-sm" required name="username" id="username"
+                  aria-describedby="username">
+              </div>
+              <button type="submit" id="join" class="btn btn-primary btn-block">Join</button>
+            </form>
+
+          </div>
+        </div>
+   
+    </div>
+  </div>
+</body>
+
+</html>

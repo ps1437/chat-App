@@ -1,7 +1,6 @@
 body {
-  background-color: #74ebd5;
-  background-image: linear-gradient(90deg, #74ebd5 0%, #9face6 100%);
 
+background-image: url('https://ae01.alicdn.com/kf/He359faa42ed24a81a317a5508a957369C/Capisco-Superhero-Backdrops-Birthday-Party-Baby-Comics-Personalized-Poster-background-photography-Photocall-Photo-Studio.jpg');
   min-height: 100vh;
 }
 
@@ -21,19 +20,20 @@ body {
   border-radius: 1rem;
 }
 
-.clearfix {
-  clear: both;
-}
+
 .chat-img {
   width: 50px;
   height: 50px;
 }
+
 .img-circle {
   border-radius: 50%;
 }
+
 .chat-img {
   display: inline-block;
 }
+
 .text-small {
   font-size: 0.9rem;
 }
@@ -42,6 +42,15 @@ body {
 .chat-box {
   height: 510px;
   overflow-y: scroll;
+}
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
 }
 
 .rounded-lg {
