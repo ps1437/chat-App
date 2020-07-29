@@ -2,8 +2,13 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const bodyParser = require('body-parser');
+var path = require('path');
 
 const PORT = process.env.PORT || 8888;
+
+
+app.use(bodyParser.urlencoded({ extended: true }));
 var userList = {};
 const rooms ={
  Comedy:{},
